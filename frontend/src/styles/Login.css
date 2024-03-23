@@ -1,0 +1,132 @@
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        font-family: Arial, sans-serif;
+    }
+
+   .wrapper {
+        width: 400px;
+        height: 450px;
+        border: 2px solid #000000; 
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        color: #ffffff;
+        padding: 10px 20px;
+        background-color:rgb(234, 234, 234);
+        opacity:80%;
+    }
+
+    .wrapper2 .icon-container-2 {
+        color: red;
+        width: 30%;
+        height: 30%;
+    }
+
+    .wrapper h1 {
+        padding: 20px;
+        font-size: 36px;
+        font-family: 'Avenir';
+        text-align: center;
+        color: #000000
+    }
+
+    .wrapper .input-box {
+        position: relative;
+        color: #000000;
+        width: 100%;
+        height: 50px;
+        margin: 30px 0;
+    }
+
+    .input-box input {
+        height: 100%;
+        width: 100%;
+        background: transparent;
+        border: 2px solid #000000; /* Black border */
+        outline: none;
+        border-radius: 40px;
+        color: #000;
+        padding: 20px 45px 20px 20px;
+    }
+
+    .input-box input::placeholder {
+        color: #000;
+    }
+
+    .input-box .icon-container {
+        position: absolute;
+        right:20px;
+        top: 50%;
+        transform: translateY(-50%)
+    }
+
+    .wrapper button {
+        width: 100%;
+        height: 45px;
+        background: #000;
+        border: none;
+        outline: none;
+        border: 2px solid rgba(0,0,0,1);
+        border-radius: 40px;
+        color: #fff;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .wrapper button:hover {
+        background:#111;
+        opacity:50%;
+    }
+
+    .wrapper .recover-register {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14.5px;
+        margin: -15px 0 15px;
+        padding: 8px;
+    }
+
+    .links-container {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center; 
+        font-size: 14.5px;
+        margin: -15px 100 15px;
+        padding: 0px;
+        background-color: transparent;
+    }
+
+    .links-container .link2 {
+        padding: 3px;
+        margin: 0 1%;
+        color: #000;
+        text-decoration: none;
+    }
+
+    .links-container .link2:hover {
+        text-decoration: underline;
+    }
+
+    .recover-register .link1{
+        color: #000;
+        text-decoration: none;
+    }
+
+    .recover-register .link1:hover {
+        text-decoration: underline;
+    }
+
+
