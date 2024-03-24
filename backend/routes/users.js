@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const usersController = require('../controllers/usersController'); // Import the users controller
+const usersController = require('../controllers/usersController'); 
 
 // Route to get all users
 router.get('/', usersController.getAllUsers);

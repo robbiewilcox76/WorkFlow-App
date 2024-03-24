@@ -1,10 +1,19 @@
-// Login.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import '../styles/Login.css';
-import { FaUser, FaLock, FaBriefcase, FaCalendarAlt, FaClipboardList } from "react-icons/fa";
+import { FaUser, FaLock, FaNetworkWired, FaCalendarAlt, FaCoffee } from "react-icons/fa";
+import { Link, useNavigate } from 'react-router-dom';
 
 function Login({ onLogin }) {
+
+  let navigate = useNavigate();
+
+  let wrapperSize = {
+    width: '400px',
+    height: '450px',
+    padding: '10px 20px'
+  };
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -30,11 +39,16 @@ function Login({ onLogin }) {
 
   return (
     <div className="container">
-      <div class="wrapper">
+      <div className="left-wrapper">
+        <FaNetworkWired/>
+        <FaCalendarAlt/>
+        <FaCoffee/>
+      </div>
+      <div className="wrapper" style={wrapperSize}>
         <h1>Welcome Back 👋</h1>
-        {error && <div>{error}</div>}
+        {error && <div className="error-message">{error}</div>}
         <form onSubmit={handleSubmit}>
-          <div class="input-box">
+          <div className="input-box">
             <input
               type="username"
               id="username"
@@ -44,7 +58,7 @@ function Login({ onLogin }) {
             />
             <div className="icon-container"> <FaUser/> </div>
           </div>
-          <div class="input-box">
+          <div className="input-box">
             <input
               type="password"
               id="password"
@@ -55,15 +69,15 @@ function Login({ onLogin }) {
             <div className="icon-container"> <FaLock/> </div>
           </div>
           <div className="recover-register"> 
-            <a href="/recover" class="link1">Forgot Password?</a>
-            <a href="/register" class="link1">Register</a>
+            <Link to="/recover-password" className="link1">Forgot Password?</Link>
+            <Link to="/register" className="link1">Register</Link>
           </div>
-          <button type="submit">Login</button>
+          <button type="submit" style={{ backgroundColor: 'rgb(0, 98, 255)',borderColor: 'rgb(0, 98, 255)' }}>Login</button>
         </form>
       </div>
       <div className="links-container">
-        <a href="https://github.com/robbiewilcox76" class="link2">GitHub</a>
-        <a href="https://www.linkedin.com/in/frwiii/" class="link2">LinkedIn</a>
+        <a href="https://github.com/robbiewilcox76" className="link2">GitHub</a>
+        <a href="https://www.linkedin.com/in/frwiii/" className="link2">LinkedIn</a>
       </div>
     </div>
   );
