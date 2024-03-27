@@ -26,7 +26,8 @@ function Login({ onLogin }) {
       const response = await axios.post(url, {username, password});
       if (response.data.success) {
         // Login successful
-        onLogin();
+        const id = response.data.id;
+        onLogin(id); //need to get id from response
       } else {
         // Not today sir
         setError('Invalid username or password');
@@ -39,7 +40,7 @@ function Login({ onLogin }) {
 
   return (
     <div className="container">
-      <div className="left-wrapper">
+      <div className="left-wrapper" style={{width: '600px'}}>
         <FaNetworkWired/>
         <FaCalendarAlt/>
         <FaCoffee/>
