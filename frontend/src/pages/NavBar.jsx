@@ -25,7 +25,7 @@ const NavBar = ({ id }) => {
 
   return (
     <Navbar bg="primary" variant="dark" className="fixed-top d-flex justify-content-center px-4">
-      <Navbar.Brand as={NavLink} to="/dashboard" style={iconStyle}>Welcome</Navbar.Brand>
+      <Navbar.Brand as={NavLink} to={`/dashboard/${id}`} style={iconStyle}>Welcome</Navbar.Brand>
       <Nav className="me-auto">
         <Nav.Link as={NavLink} to={`/calendar/${id}`} style={iconStyle}><FaCalendarAlt /></Nav.Link>
         <Nav.Link as={NavLink} to={`/todo/${id}`} style={iconStyle}><FaListUl /></Nav.Link>
