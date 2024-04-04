@@ -1,24 +1,47 @@
 // controllers/loginController.js
 
-const { executeQuery } = require('../database');
+const { MongoClient, ServerApiVersion } = require("mongodb");
+const uri = 'mongodb://docker:mongopw@localhost:55002'
 
   async function register(req, res) {
     const { name, email, username, password, passwordConfirm } = req.body;
 
-    const [firstName,lastName] = name.split(" "); 
+    const client = new MongoClient(uri,  {
+      serverApi: {
+          version: ServerApiVersion.v1,
+          strict: true,
+          deprecationErrors: true,
+        }
+      }
+    );
+
     if(password !== passwordConfirm) res.status(400).json({ success: false, message: 'Passwords do not match' });
     else {
-      try { 
-          const query = await executeQuery(
-          'INSERT INTO users (username, password, firstname, lastname, email) VALUES (?, ?, ?, ?, ?);', 
-          [username, password, firstName, lastName, email]);
-          console.log(query);
-          if(query.affectedRows==1) res.json({ success: true});
+      async function run() {
+        try {
+          // Connect the client to the server
+          await client.connect();
+          // Establish and verify connection
+          await client.db("admin").command({ ping: 1 });
+          const db = client.db("prod-app-db");
+          const collection = db.collection('users');
+  
+          const existingUser = await collection.findOne({ username: username });
+          if (existingUser) {
+            return res.status(400).json({ success: false, message: 'Username already exists' });
+          }
+          const result = await collection.insertOne({name,email,username,password});
+          res.status(201).json({ success: true, message: 'User created successfully', insertedId: result.insertedId });
+        
+        } catch (err) {
+            console.error('Error creating user:', err);
+            res.status(500).json({ success: false, message: 'Internal server error' });
+        } finally {
+          // Ensures that the client will close when you finish/error
+          await client.close();
+        }
       }
-      catch(error) {
-        console.log(query);
-        if(error.code === 'ER_DUP_ENTRY') res.status(500).json({ success: false, message: 'Username is taken' });
-      }
+      run().catch(console.dir);
     }
   }
 

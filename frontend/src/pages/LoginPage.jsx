@@ -6,8 +6,6 @@ import { Link, useNavigate } from 'react-router-dom';
 
 function Login({ onLogin }) {
 
-  let navigate = useNavigate();
-
   let wrapperSize = {
     width: '400px',
     height: '450px',

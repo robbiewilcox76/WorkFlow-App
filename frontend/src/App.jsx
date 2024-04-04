@@ -8,7 +8,8 @@ import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import CalendarPage from './pages/CalendarPage';
 import ToDoPage from './pages/ToDoPage';
-import Layout from './pages/Layout';
+import NotesPage from './pages/NotesPage';
+import NavBar from './pages/NavBar';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -22,16 +23,27 @@ function App() {
 
   return (
     <Router>
+      <NavBar id={id}/>
       <div className="App">
         <Routes>
-          <Route path="/" element={isLoggedIn ? <Navigate to="/dashboard" /> : <LoginPage onLogin={handleLogin} />} />
+          <Route
+            path="/"
+            element={
+              isLoggedIn ? (
+                // Redirect to DashboardPage with id if logged in
+                <Navigate to={`/dashboard/${id}`} replace />
+              ) : (
+                // Show LoginPage if not logged in
+                <LoginPage onLogin={handleLogin} />
+              )
+            }
+          />
           <Route path="/recover-password" element={<RecoverPage />} />
-          <Route path="/register" element={<RegisterPage/>} />
-          <Route element={<Layout id={id}/>}>
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/calendar" element={<CalendarPage />} />
-            <Route path="/todo" element={<ToDoPage />} />
-          </Route>
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/dashboard/:id" element={<DashboardPage />} />
+          <Route path="/calendar/:id" element={<CalendarPage />} />
+          <Route path="/todo/:id" element={<ToDoPage />} />
+          <Route path="/notes/:id" element={<NotesPage />} />
         </Routes>
       </div>
     </Router>
