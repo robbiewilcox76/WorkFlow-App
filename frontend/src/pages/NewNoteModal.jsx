@@ -1,8 +1,15 @@
 // src/pages/NewNoteModal.js
 import '../styles/Modal.css';
+import axios from 'axios';
 import { React, useState } from "react";
+import { useParams } from 'react-router-dom';
 
 export default function Modal() {
+    const params = useParams();
+    const id = params.id;
+    //console.log(id);
+
+    const [error, setError] = useState('');
     const [modal, setModal] = useState(false);
     const [noteTitle, setNoteTitle] = useState('');
     const [noteContent, setNoteContent] = useState('');
@@ -16,7 +23,6 @@ export default function Modal() {
         width: '550px',
         height: '45px',
         background: '#000000',
-        border: 'none',
         outline: 'none',
         border: '2px solid rgba(0,0,0,1)',
         borderRadius: '40px',
@@ -31,15 +37,22 @@ export default function Modal() {
         padding:'1px',
     }
 
-    const handleConfirm = () => {
-        // Here you can handle the confirmation action, e.g., submitting the note
+    const handleConfirm = async (e) => {
+        e.preventDefault();
         console.log('Note Title:', noteTitle);
         console.log('Note Content:', noteContent);
-        // Reset input fields
-        setNoteTitle('');
-        setNoteContent('');
-        // Close the modal
+        try {
+            const url = 'http://localhost:3000/api/notes/add-note';
+            const response = await axios.post(url, {noteTitle, noteContent, id});
+            if (!response.data.success) {
+              setError('Error uploading note');
+            }
+          } catch (error) {
+            console.error('Error uploading note:', error);
+            setError('An error occurred while adding the note');
+        }
         toggleModal();
+        setError('');
     }
     
     return (
@@ -64,6 +77,7 @@ export default function Modal() {
                                         placeholder="Title"
                                         value={noteTitle}
                                         onChange={(e) => setNoteTitle(e.target.value)}
+                                        maxLength={35}
                                     />
                                 </div>
                                 <textarea
@@ -73,6 +87,7 @@ export default function Modal() {
                                     style={{marginTop:'3%', borderRadius: '10px', backgroundColor: 'transparent', padding: '5px', width:'100%', height:'75%'}}
                                     value={noteContent}
                                     onChange={(e) => setNoteContent(e.target.value)}
+                                    maxLength={350}
                                 />
                             </div>
                         </div>

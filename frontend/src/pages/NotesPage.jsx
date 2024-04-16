@@ -1,15 +1,20 @@
 // src/pages/NotesPage.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { FaEdit } from "react-icons/fa";
 import Modal from './NewNoteModal'
 
 function Notes() {
-    const id = useParams();
+    const [error, setError] = useState('');
+    const [notes, setNotes] = useState([]);
+    const [count, setCount] = useState(0);
+    const params = useParams();
+    const id = params.id;
 
     const wrapperStyle = {
         width: '46%',
+        minWidth: '46%',
         height: '40vh',
         padding: '15px 20px',
         margin: '20px',
@@ -20,7 +25,7 @@ function Notes() {
         fontFamily: 'Avenir',
         fontSize: '25px',
         fontWeight: 'bold',
-        textAlign: 'left'
+        textAlign: 'left',
       };
 
     const containerStyle = {
@@ -28,6 +33,7 @@ function Notes() {
         flexWrap: 'wrap',
         backgroundColor: 'transparent',
         width: '90%',
+        minWidth:'90%',
         margin: '0 auto',
         justifyContent: 'center',
         alignItems: 'center',
@@ -58,39 +64,83 @@ function Notes() {
       height: '100%',
       backgroundColor: 'transparent',
       fontSize: '18px',
-      fontWeight: 'normal',
+      fontWeight: 'normal'
     }
 
     const buttonStyle = {
       marginTop: '5%',
-      width: '55%',
+      marginRight: '40%',
+      width: '10%',
       height: '45px',
-      background: '#000000',
-      border: 'none',
+      background: 'transparent',
       outline: 'none',
-      border: '2px solid rgba(0,0,0,1)',
+      border: 'none',
       borderRadius: '40px',
       color: '#fff',
       cursor: 'pointer',
       fontSize: '16px',
     }
 
-    let numWrappers = 10;
+    const deleteNote = async (id) => {
+      console.log(id)
+      try {
+        const url = `http://localhost:3000/api/notes/delete-note?id=${id}`;
+        console.log(url);
+        const response = await axios.delete(url);
+        if (!response.data.success) {
+          setError('Error uploading note');
+        }
+        setCount(count+1);
+        return response.data.notes;
+      } catch (error) {
+        console.error('Error deleting note:', error);
+        setError('An error occurred while adding the note');
+        return null;
+      }
+    };
+
+    const getNotes = async () => {
+      try {
+        const url = `http://localhost:3000/api/notes/get-notes?id=${id}`;
+        const response = await axios.get(url);
+        if (!response.data.success) {
+          setError('Error uploading note');
+        }
+        return response.data.notes;
+      } catch (error) {
+        console.error('Error uploading note:', error);
+        setError('An error occurred while adding the note');
+        return null;
+      }
+    };
+
+    useEffect(() => {
+      const fetchData = async () => {
+        const userNotes = await getNotes();
+        if (userNotes) {
+          setNotes(userNotes);
+        }
+      };
+      fetchData();
+    }, [count]);
+
+    console.log(notes)
+    
+
+    let numWrappers = notes.length;
     let wrappers = []
     let colors = ['RGB(24, 163, 223)', 'RGB(255, 107, 107)', 'RGB(255, 196, 102)', 'RGB(0, 184, 148)', 'RGB(255, 138, 96)', 'RGB(123, 104, 238)']
     for(let i=0; i<numWrappers; i++) {
       const color = colors[i%6];
       wrappers.push(
-        <div className="wrapper" style={{ ...wrapperStyle, backgroundColor: color }} key={i}>
-            Wrapper
+        <div className="wrapper" style={{ ...wrapperStyle, backgroundColor: color }} key={i} id={notes[i]._id}>
+            {notes[i].noteTitle}
             <div className="note-wrapper" style={noteStyle}> 
-              Hello there my name is Robbie Wilcox and I am a recent graduate of Rutgers University - New Brunswick.  
-              I studied computer science and am looking for software engineering opportunities.  If there are any
-              people you could possibly connect me with or any advice you may have to help my chances at getting an interview
-              I would be immensely appreciative. 
+              {notes[i].noteContent}
             </div>
             <div className="timeStamp-wrapper" style={timeStampWrapperStyle}>
-              April 4, 2024 1:42PM
+              <button onClick={() => deleteNote(notes[i]._id)} className="btn-modal" style={buttonStyle}>Delete</button>
+              {notes[i].date}
             </div>
         </div>
       )

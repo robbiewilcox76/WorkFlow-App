@@ -1,6 +1,6 @@
 // controllers/loginController.js
 const { MongoClient, ServerApiVersion } = require("mongodb");
-const uri = 'mongodb://docker:mongopw@localhost:55002'
+const uri = 'mongodb://docker:mongopw@localhost:55001'
 
   async function login(req, res) {
     const { username, password } = req.body;

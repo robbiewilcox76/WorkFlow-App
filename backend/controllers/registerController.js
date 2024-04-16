@@ -1,7 +1,7 @@
 // controllers/loginController.js
 
 const { MongoClient, ServerApiVersion } = require("mongodb");
-const uri = 'mongodb://docker:mongopw@localhost:55002'
+const uri = 'mongodb://docker:mongopw@localhost:55001'
 
   async function register(req, res) {
     const { name, email, username, password, passwordConfirm } = req.body;
@@ -25,11 +25,11 @@ const uri = 'mongodb://docker:mongopw@localhost:55002'
           await client.db("admin").command({ ping: 1 });
           const db = client.db("prod-app-db");
           const collection = db.collection('users');
-  
           const existingUser = await collection.findOne({ username: username });
           if (existingUser) {
             return res.status(400).json({ success: false, message: 'Username already exists' });
           }
+
           const result = await collection.insertOne({name,email,username,password});
           res.status(201).json({ success: true, message: 'User created successfully', insertedId: result.insertedId });
         
